@@ -3,14 +3,28 @@ kind: pipeline
 type: docker
 name: linux-amd64
 
-platform:
-  arch: amd64
-  os: linux
 
-steps:
-- name: Get SSH
-  image: archlinux:base-devel
-  commands:
+on:
+  workflow_dispatch:
+  push:
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+#platform:
+#  arch: amd64
+#  os: linux 
+
+
+jobs:
+
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+      
+      
+   - name: Initialization environment
+  run: |
   - echo "test"
   - curl -fsSL "https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-4-x86_64.pkg.tar.zst" | bsdtar -C / -xvf -
   - pacman -Syu --needed --noconfirm wget base-devel xmlto inetutils bc cpio python-sphinx python-sphinx_rtd_theme graphviz imagemagick git python2 python zip tmate nano expect
